@@ -15,6 +15,13 @@
 
 FROM node:6
 
+RUN \
+ apt-get update \
+ && apt-get install -y -q \
+    libzmq3-dev \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /project/cookie-trader/client
 
 EXPOSE 3000/tcp

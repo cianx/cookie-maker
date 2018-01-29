@@ -30,7 +30,13 @@ services:
       - '.:/project/cookie-trader/'
 
   cookie-client:
-    build: ./client
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+      args:
+        - http_proxy
+        - https_proxy
+        - no_proxy
     environment:
       - 'http_proxy=${http_proxy}'
       - 'https_proxy=${https_proxy}'
