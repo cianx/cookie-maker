@@ -1,6 +1,16 @@
 <template>
   <section class="au-animate">
-    <h2>Cookie State</h2>
+    <h2>CookieMaker State</h2>
+    <div class="row"
+        style="font-size: 10px;"
+        repeat.for='el of state | objectKeys & signal: "update"'>
+        <div class='col'>
+            Address: ${el}
+        </div>
+        <div class='col'>
+            Value: ${state[el]}
+        </div>
+    </div>
 
   </section>
 </template>

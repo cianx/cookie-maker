@@ -1,42 +1,57 @@
 
-// const {createContext, CryptoFactory} = require('sawtooth-sdk/signing');
+ import {HttpClient} from 'aurelia-fetch-client';
+
 const {createHash} = require('crypto')
-//const {protobuf} = require('sawtooth-sdk/client')
-
-//const { signer, TransactionEncoder, BatchEncoder} = require('sawtooth-sdk/client')
-
 const {CryptoFactory, createContext } = require('sawtooth-sdk/signing')
 const protobuf = require('sawtooth-sdk/protobuf')
-const request = require('browser-request')
 
 
+function hash(v) {
+    return createHash('sha512').update(v).digest('hex');
+}
 
-export class Sawtooth {
+export class CookieMakerClient {
     constructor() {
+
         this.validatorUrl = "http://localhost:3000/api/"
+        this.client = new HttpClient();
+        this.client.configure(
+            config => {
+                config.withBaseUrl('api/');
+                config.withDefaults({
+                  headers: {
+                    'Content-Type': 'application/octet-stream',
+                  }
+                });
+            });
         const context = createContext('secp256k1');
         const privateKey = context.newRandomPrivateKey();
         this.signer = new CryptoFactory(context).newSigner(privateKey);
         this.publicKey = this.signer.getPublicKey().asHex();
+        this.address = hash("cookie-maker").substr(0, 6) +
+            hash(this.publicKey).substr(64, 64);
         console.log(this.publicKey);
     }
 
     sendTransaction(payload, fx) {
 
         // onsole.log(protobuf, protobuf.TransactionHeader);
-        const payloadBytes = window.btoa(payload);
+        var enc = new TextEncoder("utf-8");
+        const payloadBytes = enc.encode(payload);
+
+        const address = this.address
 
         // STEP 1 = TransactionHeader
         const transactionHeaderBytes = protobuf.TransactionHeader.encode({
             familyName: 'cookie-maker',
             familyVersion: '1.0',
-            inputs: ['*'],
-            outputs: ['*'],
+            inputs: [address],
+            outputs: [address],
             signerPublicKey: this.signer.getPublicKey().asHex(),
             nonce: "" + new Date().getTime(),
             batcherPublicKey: this.signer.getPublicKey().asHex(),
             dependencies: [],
-            payloadSha512: createHash('sha512').update(payloadBytes).digest('hex')
+            payloadSha512: hash(payloadBytes),
         }).finish();
 
         // STEP 2 - Transaction
@@ -67,19 +82,51 @@ export class Sawtooth {
         }).finish();
 
         // STEP 6 - Send to the validator
-        console.log(batchListBytes, payloadBytes);
-        request.post({
-            url: this.validatorUrl + 'batches',
-            body: window.btoa(batchListBytes),
-            headers: {'Content-Type': 'application/octet-stream'},
-        }, (err, response) => {
-            if (err) {console.log(err);}
-            fx(err, response.body);
-        });
+       this.client.fetch('batches', {
+            method: 'post',
+            body: batchListBytes
+          })
+          .then(response => response.json())
+          .then(response => {
+                if(response.link) {
+                    response.link = this.fixUrl(response.link);
+                }
+                fx(null, response);
+          })
+          .catch(error => {
+            fx(error, null);
+          });
         return batchSignature;
     }
 
     fixUrl(url) {
         return url.replace('http://localhost:3000/', this.validatorUrl);
+    }
+
+    getMyState(fx) {
+       this.client.fetch('state/' + this.address,
+            {
+            method: 'get',
+          })
+          .then(response => response.json())
+          .then(response => {
+                fx(response);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    }
+
+    getState(fx) {
+       this.client.fetch('state', {
+            method: 'get',
+          })
+          .then(response => response.json())
+          .then(response => {
+                fx(response);
+          })
+          .catch(error => {
+            console.log(error);
+          });
     }
 }

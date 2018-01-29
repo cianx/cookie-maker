@@ -17,3 +17,6 @@ docker-compose run cookie-processor bash
 docker-compose run cookie-client bash
 docker-compose run cookie-client npm install request
 
+
+docker-compose exec validator -it bash
+

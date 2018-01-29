@@ -1,0 +1,54 @@
+<template>
+  <section class="au-animate">
+    <h2>Bake Cookie</h2>
+    <div class='container'>
+        <div class="row">
+          <div class='col'>
+              <a class='btn  btn-primary'
+                click.delegate='bakeCookie()'>
+                Bake Cookie
+              </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class='col'>
+              <div>
+                  ${bake.errorMessage & signal: 'sent'}
+              </div>
+              <div>
+                  Batch Id: ${bake.batchId & signal: 'sent'}
+              </div>
+              <div>
+                  Link: <a target="_blank"
+                  href="${bake.result.link & signal: 'sent'}">
+                    ${bake.result.link & signal: 'sent'}
+                  </a>
+              </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class='col'>
+              <a class='btn  btn-primary'
+                click.delegate='eatCookie()'>
+                Eat Cookie
+              </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class='col'>
+              <div>
+                  ${eat.errorMessage & signal: 'sent'}
+              </div>
+              <div>
+                  Batch Id: ${eat.batchId & signal: 'sent'}
+              </div>
+              <div>
+                  Link: <a target="_blank" href="${bake.result.link & signal: 'sent'}">
+                    ${eat.result.link & signal: 'sent'}
+                  </a>
+              </div>
+          </div>
+        </div>
+    </div>
+  </section>
+</template>
