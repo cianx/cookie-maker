@@ -28,7 +28,6 @@ export class CookieState {
   }
 
   updateState() {
-    console.log("updateState");
     this.client.getState(result => this.decodeState(result.data));
     this.timerId = setTimeout(() => this.updateState(), 2000);
   }
