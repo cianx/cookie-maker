@@ -12,8 +12,7 @@ export class BakeCookie {
   }
 
   bakeCookie() {
-    console.log('baking', this.sawtooth);
-    const txn = `bake:1`;
+    const txn = `bake`;
     this.batchId = this.sawtooth.sendTransaction(txn, (err, body) => {
       this.error = err;
       this.result = body;
