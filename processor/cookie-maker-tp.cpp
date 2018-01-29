@@ -33,6 +33,9 @@
 
 using namespace log4cxx;
 
+static log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger
+    ("CookieMaker"));
+
 static const std::string COOKIE_MAKER_NAMESPACE = "cookie-maker";
 #define URL_DEFAULT "tcp://127.0.0.1:4004"
 
@@ -75,12 +78,12 @@ class CookieMakerApplicator:  public sawtooth::TransactionApplicator {
 
     void Apply() {
         std::cout << "CookieMakerApplicator::Apply";
-        std::string key = this->txn->signature();
+        std::string key = this->txn->header()->GetValue(sawtooth::TransactionHeaderSignerPublicKey);
 
         const std::string& raw_data = this->txn->payload();
         std::string verb = raw_data;
 
-        if (verb == "make") {
+        if (verb == "bake") {
             this->BakeCookie(key);
         } else if (verb == "eat") {
             this->EatCookie(key);
@@ -98,8 +101,8 @@ class CookieMakerApplicator:  public sawtooth::TransactionApplicator {
     }
     void BakeCookie(const std::string& key) {
         auto address = this->MakeAddress(key);
-        std::cout << "CookieMakerApplicator::BakeCookie Key: " << key
-            << " Address: " << address;
+        LOG4CXX_DEBUG(logger, "CookieMakerApplicator::BakeCookie Key: " << key
+            << " Address: " << address);
 
         uint32_t value = 0;
         std::string state_value_rep;
@@ -112,6 +115,7 @@ class CookieMakerApplicator:  public sawtooth::TransactionApplicator {
         value++;
 
         // encode the value map back to string for storage.
+        LOG4CXX_DEBUG(logger, "Storing " << value << " cookies");
         std::stringstream state;
         state << value;
         state_value_rep = state.str();
@@ -125,12 +129,12 @@ class CookieMakerApplicator:  public sawtooth::TransactionApplicator {
 
         auto address = this->MakeAddress(key);
 
-        std::cout << "CookieMakerApplicator::EatCookie Key: " << key
-            << " Address: " << address;
+        LOG4CXX_DEBUG(logger, "CookieMakerApplicator::EatCookie Key: " << key
+            << " Address: " << address);
         uint32_t value = 0;
         std::string state_value_rep;
         if(this->state->GetState(&state_value_rep, address)) {
-            atoi(state_value_rep.c_str());
+            value = atoi(state_value_rep.c_str());
         } else {
             std::stringstream error;
             error << "Verb was 'eat', but address not found in state for " <<
@@ -141,6 +145,7 @@ class CookieMakerApplicator:  public sawtooth::TransactionApplicator {
         value--;
 
         // encode the value map back to string for storage.
+        LOG4CXX_DEBUG(logger, "Storing " << value << " cookies");
         std::stringstream state;
         state << value;
         state_value_rep = state.str();
@@ -154,6 +159,7 @@ class CookieMakerHandler: public sawtooth::TransactionHandler {
 public:
     CookieMakerHandler() {
         this->namespacePrefix = SHA512(COOKIE_MAKER_NAMESPACE).substr(0, 6);
+        LOG4CXX_DEBUG(logger, "namespace:" << this->namespacePrefix);
     }
 
     std::string transaction_family_name() const {
@@ -217,6 +223,7 @@ int main(int argc, char** argv) {
 
         // Set up a simple configuration that logs on the console.
         BasicConfigurator::configure();
+        logger->setLevel(Level::getAll());
 
         // Create a transaction processor and register our
         // handlers with it.

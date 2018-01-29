@@ -8,7 +8,7 @@ cd build
 
 cmake ..
 make
-bin/cookie-maker-tp
+bin/cookie-maker-tp tcp://validator:4004
 
 #while true; do
 #  inotifywait -qm  -e modify ../cookie-maker-tp.cpp | while read path events file; do
