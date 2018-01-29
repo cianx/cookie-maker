@@ -142,7 +142,13 @@ class CookieMakerApplicator:  public sawtooth::TransactionApplicator {
             throw sawtooth::InvalidTransaction(error.str());
         }
 
-        value--;
+        if (value != 0) {
+            value--;
+        } else {
+            std::stringstream error;
+            error << "You don't have any cookies to eat." << key;
+            throw sawtooth::InvalidTransaction(error.str());
+        }
 
         // encode the value map back to string for storage.
         LOG4CXX_DEBUG(logger, "Storing " << value << " cookies");
