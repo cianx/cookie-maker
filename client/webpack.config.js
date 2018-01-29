@@ -82,6 +82,7 @@ module.exports = {
     port: 3000,
     contentBase: path.join(__dirname, 'dist'),
     publicPath: '/',
+    disableHostCheck: true,
     proxy: {
       "/api": {
         target: "http://sawtooth-rest-api:8008",

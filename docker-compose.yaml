@@ -31,10 +31,13 @@ services:
 
   cookie-client:
     build: ./client
+    environment:
+      - 'http_proxy=${http_proxy}'
+      - 'https_proxy=${https_proxy}'
     volumes:
       - '.:/project/cookie-trader/'
     ports:
-      - '3000:3000'
+      - '0.0.0.0:3000:3000'
     depends_on:
       - sawtooth-rest-api
 
