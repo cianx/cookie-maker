@@ -33,7 +33,6 @@ export class CookieState {
   }
 }
 
-
 export class ObjectKeysValueConverter {
     toView(obj) {
         if(obj) return Object.keys(obj);

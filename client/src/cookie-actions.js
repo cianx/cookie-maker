@@ -16,7 +16,7 @@ export class CookieActions {
 
   bakeCookie() {
     const txn = `bake`;
-    this.batchId = this.client.sendTransaction(txn, (err, body) => {
+    this.bake.batchId = this.client.sendTransaction(txn, (err, body) => {
       this.bake.error = err;
       this.bake.result = body;
       console.log("Bake txn done.", err, body);
@@ -26,7 +26,7 @@ export class CookieActions {
   }
   eatCookie() {
     const txn = `eat`;
-    this.batchId = this.client.sendTransaction(txn, (err, body) => {
+    this.eat.batchId = this.client.sendTransaction(txn, (err, body) => {
       this.eat.error = err;
       this.eat.result = body;
       console.log("Eat txn done.", err, body);

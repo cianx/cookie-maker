@@ -14,7 +14,6 @@ export class MyCookies {
     this.address = client.address;
   }
 
-
   attached() {
     this.updateState();
   }
@@ -24,6 +23,7 @@ export class MyCookies {
   }
 
   decodeState(state) {
+    // get convert the base64 encoded value to string
     this.cookies = window.atob(state);
     this.signaler.signal('updated');
   }

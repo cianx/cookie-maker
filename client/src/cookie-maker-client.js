@@ -12,8 +12,7 @@ function hash(v) {
 
 export class CookieMakerClient {
     constructor() {
-
-        this.validatorUrl = "http://localhost:3000/api/"
+        this.validatorUrl = window.document.location.href +"api/"
         this.client = new HttpClient();
         this.client.configure(
             config => {
