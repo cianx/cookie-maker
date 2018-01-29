@@ -37,14 +37,14 @@
         <div class="row">
           <div class='col'>
               <div>
-                  ${eat.errorMessage & signal: 'sent'}
+                  ${eat.errorMessage}
               </div>
               <div>
-                  Batch Id: ${eat.batchId & signal: 'sent'}
+                  Batch Id: ${eat.batchId}
               </div>
               <div>
-                  Link: <a target="_blank" href="${eat.result.link & signal: 'sent'}">
-                    ${eat.result.link & signal: 'sent'}
+                  Link: <a target="_blank" href="${eat.result.link}">
+                    ${eat.result.link}
                   </a>
               </div>
           </div>
