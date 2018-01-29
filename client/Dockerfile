@@ -22,7 +22,7 @@ RUN \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /project/cookie-trader/client
+WORKDIR /project/cookie-maker/client
 
 EXPOSE 3000/tcp
 

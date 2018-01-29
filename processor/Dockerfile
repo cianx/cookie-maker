@@ -40,6 +40,6 @@ RUN \
 
 EXPOSE 4004/tcp
 
-WORKDIR /project/cookie-trader/processor
+WORKDIR /project/cookie-maker/processor
 
 CMD bash -c "./build.sh"

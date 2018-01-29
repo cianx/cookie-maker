@@ -27,7 +27,7 @@ services:
     depends_on:
       - validator
     volumes:
-      - '.:/project/cookie-trader/'
+      - '.:/project/cookie-maker/'
 
   cookie-client:
     build:
@@ -41,7 +41,7 @@ services:
       - 'http_proxy=${http_proxy}'
       - 'https_proxy=${https_proxy}'
     volumes:
-      - '.:/project/cookie-trader/'
+      - '.:/project/cookie-maker/'
     ports:
       - '0.0.0.0:3000:3000'
     depends_on:
@@ -63,8 +63,8 @@ services:
   sawtooth-shell:
     image: hyperledger/sawtooth-shell:1.0
     volumes:
-      - '.:/project/cookie-trader'
-    working_dir: /project/cookie-trader
+      - '.:/project/cookie-maker'
+    working_dir: /project/cookie-maker
     container_name: sawtooth-shell
     depends_on:
       - sawtooth-rest-api

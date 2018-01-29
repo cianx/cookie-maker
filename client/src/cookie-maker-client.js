@@ -5,7 +5,6 @@ const {createHash} = require('crypto')
 const {CryptoFactory, createContext } = require('sawtooth-sdk/signing')
 const protobuf = require('sawtooth-sdk/protobuf')
 
-
 function hash(v) {
     return createHash('sha512').update(v).digest('hex');
 }
