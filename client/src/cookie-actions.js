@@ -20,9 +20,7 @@ export class CookieActions {
       this.bake.error = err;
       this.bake.result = body;
       console.log("Bake txn done.", err, body);
-      this.signaler.signal('sent');
     });
-    this.signaler.signal('sent');
   }
   eatCookie() {
     const txn = `eat`;
@@ -30,9 +28,7 @@ export class CookieActions {
       this.eat.error = err;
       this.eat.result = body;
       console.log("Eat txn done.", err, body);
-      this.signaler.signal('sent');
     });
-    this.signaler.signal('sent');
   }
 }
 

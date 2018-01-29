@@ -13,15 +13,15 @@
         <div class="row">
           <div class='col'>
               <div>
-                  ${bake.errorMessage & signal: 'sent'}
+                  ${bake.errorMessage}
               </div>
               <div>
-                  Batch Id: ${bake.batchId & signal: 'sent'}
+                  Batch Id: ${bake.batchId}
               </div>
               <div>
                   Link: <a target="_blank"
-                  href="${bake.result.link & signal: 'sent'}">
-                    ${bake.result.link & signal: 'sent'}
+                  href="${bake.result.link}">
+                    ${bake.result.link}
                   </a>
               </div>
           </div>
@@ -43,7 +43,7 @@
                   Batch Id: ${eat.batchId & signal: 'sent'}
               </div>
               <div>
-                  Link: <a target="_blank" href="${bake.result.link & signal: 'sent'}">
+                  Link: <a target="_blank" href="${eat.result.link & signal: 'sent'}">
                     ${eat.result.link & signal: 'sent'}
                   </a>
               </div>
